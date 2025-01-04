@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "vercel-dev": "prisma generate && prisma migrate deploy && next dev",
+    "postinstall": "prisma generate"
+
   },
   "dependencies": {
     "@iconify/react": "^5.1.0",
