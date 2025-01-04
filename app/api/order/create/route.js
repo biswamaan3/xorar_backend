@@ -1,7 +1,7 @@
 // app/api/orders/create/route.js
 
 import { prisma } from '../../../../lib/prisma';
-import { sendOrderConfirmationEmail } from '../../../../lib/email';
+// import { sendOrderConfirmationEmail } from '../../../../lib/email';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -44,7 +44,7 @@ export async function POST(req) {
     });
 
     // Send order confirmation email
-    await sendOrderConfirmationEmail(order);
+    // await sendOrderConfirmationEmail(order);
 
     return new NextResponse(JSON.stringify({ success: true, message: 'Order created and email sent' }), { status: 201 });
   } catch (error) {

@@ -1,4 +1,4 @@
-import { prisma } from '../../../../lib/prisma'; // Prisma client
+import { prisma } from "../../../../../lib/prisma"; // Prisma client
 
 export async function POST(req) {
   const referer = req.headers.get('referer');
