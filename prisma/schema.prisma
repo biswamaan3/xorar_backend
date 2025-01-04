@@ -8,7 +8,6 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
   output   = "./generated/client"
-
 }
 
 model User {
@@ -43,7 +42,7 @@ model Product {
   title            String
   categoryId       Int
   category         Category      @relation(fields: [categoryId], references: [id])
-  sizes            Size[]        @relation("ProductSizes") 
+  sizes            Size[]        @relation("ProductSizes")
   styleId          Int
   style            Style         @relation(fields: [styleId], references: [id])
   colors           Color[]       @relation("ProductColors") // Many-to-many relation
@@ -53,8 +52,8 @@ model Product {
   actual_price     Float
   discounted_price Float
   discount_percent Float
-  thumbnail        String        // URL of the thumbnail image
-  images           String[]      // Array of URLs for product images
+  thumbnail        String // URL of the thumbnail image
+  images           String[] // Array of URLs for product images
   ratings          Rating[]      @relation("ProductRatings")
   reviews          Review[]      @relation("ProductReviews")
   createdAt        DateTime      @default(now())
@@ -63,12 +62,13 @@ model Product {
   averageRating    Float?        @default(0)
   showOnHome       Boolean       @default(false)
   slug             String        @unique // Add slug field here
+  OrderDetail      OrderDetail[]
 }
 
 model Color {
   id       Int       @id @default(autoincrement())
   name     String
-  code     String     // Hex code for the color
+  code     String // Hex code for the color
   products Product[] @relation("ProductColors") // Many-to-many relation
 }
 
@@ -104,33 +104,31 @@ model Style {
   products Product[]
 }
 
-
 model Order {
-  id            Int       @id @default(autoincrement())
-  fullName      String    // Full name of the buyer
-  email         String    // Email of the buyer
-  address       String    // Shipping address
-  city          String    // City of the buyer
-  country       String    // Country of the buyer
-  state         String    // State of the buyer
-  paymentStatus String    // Payment status (e.g., "pending", "completed")
-  deliveryStatus String   // Delivery status (e.g., "pending", "shipped", "delivered")
-  createdAt     DateTime  @default(now()) // Order creation date
-  updatedAt     DateTime  @updatedAt      // Order update date
-  orderDetails  OrderDetail[] // Related order details
-  
+  id             Int           @id @default(autoincrement())
+  fullName       String // Full name of the buyer
+  email          String // Email of the buyer
+  address        String // Shipping address
+  city           String // City of the buyer
+  country        String // Country of the buyer
+  state          String // State of the buyer
+  paymentStatus  String // Payment status (e.g., "pending", "completed")
+  deliveryStatus String // Delivery status (e.g., "pending", "shipped", "delivered")
+  createdAt      DateTime      @default(now()) // Order creation date
+  updatedAt      DateTime      @updatedAt // Order update date
+  orderDetails   OrderDetail[] // Related order details
 }
 
 model OrderDetail {
-  id          Int      @id @default(autoincrement())
-  orderId     Int      // Foreign key to Order
-  productId   Int      // Foreign key to Product
-  productName String   // Name of the product
-  productUrl  String   // URL of the product
-  quantity    Int      // Quantity of the product
-  price       Float    // Price of a single product
-  totalPrice  Float    // Total price for this product (price * quantity)
-  
-  order       Order    @relation(fields: [orderId], references: [id])   // Relationship to Order
-  product     Product  @relation(fields: [productId], references: [id]) // Relationship to Product
+  id          Int    @id @default(autoincrement())
+  orderId     Int // Foreign key to Order
+  productId   Int // Foreign key to Product
+  productName String // Name of the product
+  productUrl  String // URL of the product
+  quantity    Int // Quantity of the product
+  price       Float // Price of a single product
+  totalPrice  Float // Total price for this product (price * quantity)
+
+  order   Order   @relation(fields: [orderId], references: [id]) // Relationship to Order
+  product Product @relation(fields: [productId], references: [id]) // Relationship to Product
 }
