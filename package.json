@@ -10,7 +10,6 @@
     "vercel-build": "npx prisma generate && npx prisma migrate deploy && next build",
     "vercel-dev": "npx prisma generate && npx prisma migrate deploy && next build",
     "postinstall": "npx prisma generate && npx prisma migrate deploy"
-
   },
   "dependencies": {
     "@iconify/react": "^5.1.0",
@@ -32,8 +31,9 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "postcss": "^8",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
     "prisma": "^6.1.0",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.17"
   }
 }
