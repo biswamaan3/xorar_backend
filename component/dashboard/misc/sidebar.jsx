@@ -88,6 +88,18 @@ const Sidebar = () => {
 						/>
 					</Dropdown>
 
+					<Dropdown icon={<Layers2 size={22} />} label='Stats'>
+						<SidebarDropDownItem
+							label='Cart Items '
+							link='/dashboard/stats/cart'
+						/>
+						<SidebarDropDownItem
+							label='Wishlist Items'
+							link='/dashboard/stats/wishlist'
+						/>
+						
+					</Dropdown>
+
 					
 
 					{/* <SidebarItem
