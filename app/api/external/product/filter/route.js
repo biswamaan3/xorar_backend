@@ -1,73 +1,94 @@
-import { prisma } from "../../../../../lib/prisma"; // Prisma client
+import { prisma } from "../../../../../lib/prisma";
 
 export async function POST(req) {
-  const referer = req.headers.get('referer');
-  const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
-
-  if (!referer || !allowedOrigins.some(origin => referer.startsWith(origin))) {
-    return new Response(JSON.stringify({ message: 'Invalid origin.' }), { status: 403 });
-  }
-
-  const { price_min, price_max, color, size, category, subcategories, type, showHome, recently_added, most_popular, page = 1, size_per_page = 10 } = await req.json();
+  const {
+    price_min,
+    price_max,
+    color,
+    size, 
+    category,
+    style,
+    subcategories,
+    type,
+    showHome,
+    recently_added,
+    most_popular,
+    page = 1,
+    size_per_page = 10,
+  } = await req.json();
 
   const skip = (page - 1) * size_per_page;
 
-  // Build the filter criteria
   const filters = {};
 
-  if (price_min || price_max) {
-    filters.price = { gte: price_min || 0, lte: price_max || Infinity };
+  if (price_min !== undefined || price_max !== undefined) {
+    filters.price = {};
+    if (price_min !== undefined) filters.price.gte = price_min;
+    if (price_max !== undefined) filters.price.lte = price_max;
   }
-  if (color) {
-    filters.colors = { has: color }; // Color is an array, so we check for its existence
-  }
-  if (size) {
-    filters.size = size; // Size is a single value, not an array in your schema
-  }
-  if (category) {
-    filters.categoryId = category; // Category is an ID reference
-  }
-  if(showHome){
-    filters.showOnHome = showHome;
-  }
-  if (subcategories && subcategories.length > 0) {
-    filters.subcategories = {
+
+  if (color && Array.isArray(color) && color.length > 0) {
+    filters.colors = {
       some: {
-        id: { in: subcategories }, // Filtering based on subcategory IDs
+        id: { in: color },
       },
     };
   }
+
+  if (size && Array.isArray(size) && size.length > 0) {
+    filters.sizes = {
+      some: {
+        id: { in: size },
+      },
+    };
+  }
+
+  if (category && Array.isArray(category) && category.length > 0) {
+    filters.categoryId = { in: category }; 
+  }
+
+  if (style && Array.isArray(style) && style.length > 0) {
+    filters.styleId = { in: style };
+  }
+
+  if (showHome !== undefined) {
+    filters.showOnHome = showHome;
+  }
+
+  if (subcategories && Array.isArray(subcategories) && subcategories.length > 0) {
+    filters.subcategories = {
+      some: {
+        id: { in: subcategories },
+      },
+    };
+  }
+
   if (type) {
-    filters.type = type; // Product type filter
+    filters.type = type;
   }
 
-  // Sorting logic
-  let orderBy = {};
-
+  const orderBy = [];
   if (recently_added) {
-    orderBy.createdAt = 'desc'; // Sort by most recent
+    orderBy.push({ createdAt: 'desc' });
   }
-
   if (most_popular) {
-    orderBy.ratings = { _count: 'desc' }; // Sort by ratings count (most popular)
+    orderBy.push({ ratings: { _count: 'desc' } });
   }
 
   try {
-    // Fetch filtered and sorted products
     const products = await prisma.product.findMany({
       where: filters,
       skip,
       take: size_per_page,
-      orderBy: orderBy,
+      orderBy: orderBy.length > 0 ? orderBy : undefined,
       include: {
-        category: true,  // Include category data in the result
-        subcategories: true, // Include subcategories
-        ratings: true, // Include ratings for popularity
-        reviews: true, // Include reviews
+        category: true,
+        ratings: true,
+        colors: true,
+        sizes: true
       },
     });
 
-    // Get the total count of products based on filters
     const totalProducts = await prisma.product.count({
       where: filters,
     });
@@ -75,6 +96,7 @@ export async function POST(req) {
     return new Response(
       JSON.stringify({
         success: true,
+        totalProducts,
         products,
         pagination: {
           page,
@@ -86,6 +108,12 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'Error fetching products.' }), { status: 500 });
+    return new Response(
+      JSON.stringify({
+        message: 'Error fetching products.',
+        error: error.message || error,
+      }),
+      { status: 500 }
+    );
   }
 }
