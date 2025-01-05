@@ -20,7 +20,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*', // Allow all origins (you can restrict this to your frontend's URL for better security)
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',

@@ -7,7 +7,6 @@ export default function Home() {
 			window.location.href = "/login";
 		} else {
 			if (
-				localStorage.getItem("userName") === "biswa" &&
 				localStorage.getItem("token") != undefined
 			) {
 				window.location.href = "/dashboard";
