@@ -156,13 +156,32 @@ export async function GET(req) {
 	try {
 		let properties;
 		if (type === "all") {
-			const [colors, sizes, styles, categories] = await Promise.all([
-				prisma.color.findMany(),
-				prisma.size.findMany(),
-				prisma.style.findMany(),
-				prisma.category.findMany(),
-			]);
-			properties = {colors, sizes, styles, categories};
+			let priceRange = null;
+
+			const [colors, sizes, styles, categories, priceData] =
+				await Promise.all([
+					prisma.color.findMany(),
+					prisma.size.findMany(),
+					prisma.style.findMany(),
+					prisma.category.findMany(),
+					prisma.product.aggregate({
+						_min: {price: true},
+						_max: {price: true},
+					}),
+				]);
+
+			// If priceData exists, extract min and max price
+			if (
+				priceData._min.price !== null &&
+				priceData._max.price !== null
+			) {
+				priceRange = {
+					min: priceData._min.price,
+					max: priceData._max.price,
+				};
+			}
+
+			properties = {colors, sizes, styles, categories, priceRange};
 		} else if (type === "color") {
 			properties = await prisma.color.findMany();
 		} else if (type === "size") {
