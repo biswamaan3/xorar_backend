@@ -131,3 +131,90 @@ model OrderDetail {
   order   Order   @relation(fields: [orderId], references: [id]) // Relationship to Order
   product Product @relation(fields: [productId], references: [id]) // Relationship to Product
 }
+
+
+
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  password     String // Store the hashed password
+  access_token String? // The access token for API authentication
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isAdmin      Boolean  @default(false) // Admin flag
+  addedToCart  AddedToCart[]
+  addedToWishlist AddedToWishlist[]
+}
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  description   String?
+  products      Product[]
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id         Int       @id @default(autoincrement())
+  name       String
+  categoryId Int
+  category   Category  @relation(fields: [categoryId], references: [id])
+  products   Product[] @relation("ProductSubcategories")
+}
+
+model Product {
+  id               Int           @id @default(autoincrement())
+  title            String
+  categoryId       Int
+  category         Category      @relation(fields: [categoryId], references: [id])
+  sizes            Size[]        @relation("ProductSizes")
+  styleId          Int
+  style            Style         @relation(fields: [styleId], references: [id])
+  colors           Color[]       @relation("ProductColors") // Many-to-many relation
+  subcategories    Subcategory[] @relation("ProductSubcategories")
+  description      String
+  price            Float
+  actual_price     Float
+  discounted_price Float
+  discount_percent Float
+  thumbnail        String // URL of the thumbnail image
+  images           String[] // Array of URLs for product images
+  ratings          Rating[]      @relation("ProductRatings")
+  reviews          Review[]      @relation("ProductReviews")
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  views            Int           @default(0)
+  averageRating    Float?        @default(0)
+  showOnHome       Boolean       @default(false)
+  slug             String        @unique // Add slug field here
+  OrderDetail      OrderDetail[]
+}
+
+model AddedToCart {
+  id          Int      @id @default(autoincrement())
+  user_string String 
+  productId   Int      
+  productName String   
+  quantity    Int      
+  country     String   
+  city        String  
+  dateAdded   DateTime @default(now()) 
+  dateRemoved DateTime? 
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+model AddedToWishlist {
+  id          Int      @id @default(autoincrement())
+  user_string String 
+  productId   Int      
+  productName String   
+  quantity    Int      
+  country     String   
+  city        String  
+  dateAdded   DateTime @default(now()) 
+  dateRemoved DateTime? 
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
