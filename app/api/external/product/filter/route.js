@@ -1,6 +1,7 @@
 import { prisma } from "../../../../../lib/prisma";
 
 export async function POST(req) {
+  const body = await req.json();
   const {
     price_min,
     price_max,
@@ -11,40 +12,24 @@ export async function POST(req) {
     subcategories,
     type,
     showHome,
-    recently_added,
-    most_popular,
+    sort_by, // Unified sorting field
     page = 1,
-    size_per_page = 10,
-  } = await req.json();
-
-  console.log("Received filters:", {
-    price_min,
-    price_max,
-    color,
-    size,
-    category,
-    style,
-    subcategories,
-    type,
-    showHome,
-    recently_added,
-    most_popular,
-    page,
-    size_per_page,
-  });
+    size_per_page = 12,
+  } = body;
 
   const skip = (page - 1) * size_per_page;
 
+  // Initialize filters object
   const filters = {};
 
-  // Price range filtering
-  if (price_min !== undefined || price_max !== undefined) {
+  // Price range filter
+  if (price_min || price_max) {
     filters.price = {};
-    if (price_min !== undefined) filters.price.gte = price_min;
-    if (price_max !== undefined) filters.price.lte = price_max;
+    if (price_min) filters.price.gte = price_min;
+    if (price_max) filters.price.lte = price_max;
   }
 
-  // Color filtering
+  // Color filter
   if (color && Array.isArray(color) && color.length > 0) {
     filters.colors = {
       some: {
@@ -53,7 +38,7 @@ export async function POST(req) {
     };
   }
 
-  // Size filtering
+  // Size filter
   if (size && Array.isArray(size) && size.length > 0) {
     filters.sizes = {
       some: {
@@ -62,22 +47,22 @@ export async function POST(req) {
     };
   }
 
-  // Category filtering
+  // Category filter
   if (category && Array.isArray(category) && category.length > 0) {
     filters.categoryId = { in: category };
   }
 
-  // Style filtering
+  // Style filter
   if (style && Array.isArray(style) && style.length > 0) {
     filters.styleId = { in: style };
   }
 
-  // Show on home filtering
+  // Show on home filter
   if (showHome !== undefined) {
     filters.showOnHome = showHome;
   }
 
-  // Subcategory filtering
+  // Subcategory filter
   if (subcategories && Array.isArray(subcategories) && subcategories.length > 0) {
     filters.subcategories = {
       some: {
@@ -86,20 +71,28 @@ export async function POST(req) {
     };
   }
 
-  // Type filtering
+  // Type filter
   if (type) {
     filters.type = type;
   }
 
+  // Sorting criteria
   const orderBy = [];
-  if (recently_added) {
+ 
+
+  // Unified sorting logic
+   
+ if (sort_by === "most_popular") {
+    orderBy.push({ views: { _count: "desc" } });
+  } else if (sort_by === "low_to_high") {
+    orderBy.push({ price: "asc" });
+  } else if (sort_by === "high_to_low") {
+    orderBy.push({ price: "desc" });
+  }else{
     orderBy.push({ createdAt: "desc" });
   }
-  if (most_popular) {
-    orderBy.push({ ratings: { _count: "desc" } });
-  }
 
-  console.log("Filters applied:", filters);
+  console.log("Received filters:", JSON.stringify(body, null, 2));
 
   try {
     const products = await prisma.product.findMany({
@@ -115,12 +108,10 @@ export async function POST(req) {
       },
     });
 
+    // Count total products for pagination
     const totalProducts = await prisma.product.count({
       where: filters,
     });
-
-    console.log("Products fetched:", products);
-    console.log("Total products:", totalProducts);
 
     return new Response(
       JSON.stringify({
