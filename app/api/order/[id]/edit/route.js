@@ -7,9 +7,6 @@ export async function PATCH(req, { params }) {
   const { id } = params;
   const { paymentStatus, deliveryStatus } = await req.json();
   
-  const user = req.headers.get('user'); 
-  const isAdmin = user?.isAdmin;
-
   if (!isAdmin) {
     return new NextResponse(JSON.stringify({ message: 'Unauthorized' }), { status: 403 });
   }

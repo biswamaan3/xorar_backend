@@ -1,8 +1,11 @@
 import React from 'react'
+import OrderDetailsForm from './DemoPage'
 
 function page() {
   return (
-    <div className='h-screen py-20'>page</div>
+    <div className=''>
+      <OrderDetailsForm/>
+    </div>
   )
 }
 

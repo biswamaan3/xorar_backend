@@ -19,13 +19,13 @@ const TableWithPagination = ({
 	currentPage,
 	itemsPerPage,
 	onDelete,
-	onPageChange, // Page change handler passed as prop
+	onPageChange,
 }) => {
     const handleDelete = async (id) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this item?");
         
         if (!isConfirmed) {
-          return; // If the user cancels, do nothing
+          return; 
         }
       
         try {

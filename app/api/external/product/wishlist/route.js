@@ -69,10 +69,8 @@ export async function GET(req) {
       take: limit,
     });
 
-    // Get total count of items
     const totalCount = await prisma.addedToWishlist.count();
 
-    // Calculate total number of pages
     const totalPages = Math.ceil(totalCount / limit);
 
     return new Response(

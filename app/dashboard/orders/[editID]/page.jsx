@@ -1,0 +1,47 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import OrderDetailsForm from "../../DemoPage";
+
+const getData = async (editID) => {
+  const res = await fetch(`http://localhost:3000/api/order/${editID}`);
+  const data = await res.json();
+  if (data.success) {
+    return data;
+  }
+  throw new Error("Failed to fetch data");
+};
+
+function Page({ params }) {
+  const [orderData, setOrderData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Await params if needed
+    const fetchData = async () => {
+      const { editID } = await params;  // Await params to get editID
+      try {
+        const data = await getData(editID);
+        setOrderData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [params]); // Dependencies include params
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return <OrderDetailsForm data={orderData.order} />;
+}
+
+export default Page;
