@@ -1,39 +1,64 @@
 // app/api/external/products/one/route.js
-import { prisma } from "../../../../../lib/prisma"; // Prisma client
+import {prisma} from "../../../../../lib/prisma"; // Prisma client
 
 export async function GET(req) {
-  const referer = req.headers.get('referer');
-  const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+	const referer = req.headers.get("referer");
+	const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
 
-  // if (!referer || !allowedOrigins.some(origin => referer.startsWith(origin))) {
-  //   return new Response(JSON.stringify({ message: 'Invalid origin.' }), { status: 403 });
-  // }
+	// if (!referer || !allowedOrigins.some(origin => referer.startsWith(origin))) {
+	//   return new Response(JSON.stringify({ message: 'Invalid origin.' }), { status: 403 });
+	// }
 
+	const url = new URL(req.url);
+	const slug = url.searchParams.get("slug");
 
-  const url = new URL(req.url);
-  const slug = url.searchParams.get('slug');
+	if (!slug) {
+		return new Response(JSON.stringify({message: "Slug is required."}), {
+			status: 400,
+		});
+	}
 
-  if (!slug) {
-    return new Response(JSON.stringify({ message: 'Slug is required.' }), { status: 400 });
-  }
+	try {
+		const product = await prisma.product.findUnique({
+			where: {slug},
+			include: {
+				sizes: true,
+				colors: true,
+				category: true,
+				style: true,
+				ratings: true,
+			},
+		});
 
-  try {
-    const product = await prisma.product.findUnique({
-      where: { slug },
-      include: {
-        sizes: true,
-        colors: true,
-        category: true,
-        style: true
-      }
-    });
+		if (!product) {
+			return new Response(
+				JSON.stringify({message: "Product not found."}),
+				{status: 404}
+			);
+		}
 
-    if (!product) {
-      return new Response(JSON.stringify({ message: 'Product not found.' }), { status: 404 });
-    }
+		const recommendedProducts = await prisma.product.findMany({
+			where: {
+				categoryId: product.categoryId,
+				slug: {not: product.slug},
+			},
+			take: 4,
+		});
 
-    return new Response(JSON.stringify({ success: true, product }), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify({ message: 'Error fetching product.', error }), { status: 500 });
-  }
+		return new Response(
+			JSON.stringify({
+				success: true,
+				product,
+				recommendedProducts,
+			}),
+			{
+				status: 200,
+			}
+		);
+	} catch (error) {
+		return new Response(
+			JSON.stringify({message: "Error fetching product.", error}),
+			{status: 500}
+		);
+	}
 }

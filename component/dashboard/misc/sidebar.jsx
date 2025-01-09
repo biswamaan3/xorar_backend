@@ -9,6 +9,8 @@ import {
 	BookA,
 	ShirtIcon,
 	Layers2,
+	Star,
+	ChartColumnStacked,
 } from "lucide-react";
 import Link from "next/link";
 const SidebarItem = ({icon, label, onClick, link = "/", children}) => {
@@ -100,7 +102,7 @@ const Sidebar = () => {
 							/>
 						</Dropdown>
 
-						<Dropdown icon={<Layers2 size={22} />} label='Stats'>
+						<Dropdown icon={<ChartColumnStacked size={22} />} label='Stats'>
 							<SidebarDropDownItem
 								label='Cart Items '
 								link='/dashboard/stats/cart'
@@ -111,11 +113,17 @@ const Sidebar = () => {
 							/>
 						</Dropdown>
 
-						{/* <SidebarItem
+						<SidebarItem
+							icon={<Star size={22} className='' />}
+							label='Reviews'
+							link="/dashboard/reviews"
+						/>
+						 <SidebarItem
 						icon={<Settings size={22} />}
-						label='Settings'
+						label='Logout'
+						link="/logout"
 					/>
-					<SidebarItem icon={<HelpCircle size={22} />} label='Help' /> */}
+				{/*	<SidebarItem icon={<HelpCircle size={22} />} label='Help' /> */}
 					</ul>
 				</nav>
 			</div>

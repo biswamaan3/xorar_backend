@@ -1,7 +1,7 @@
 // app/api/products/route.js
-import { authMiddleware } from '@/lib/auth.middlware';
-import { prisma } from '@/lib/prisma';
-import { slugify } from '@/lib/slugify'; // Helper function to create slugs
+import { authMiddleware } from "../../../lib/auth.middlware";
+import { prisma } from "../../../lib/prisma";
+import { slugify } from "../../../lib/slugify"; // Helper function to create slugs
 
 export async function GET(req) {
   try {

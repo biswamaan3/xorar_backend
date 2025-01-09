@@ -1,4 +1,5 @@
 import { authMiddleware } from "@/lib/auth.middlware";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req) {
     const authError = await authMiddleware(req);
@@ -12,8 +13,10 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    const IntRating = parseInt(ratingValue, 10);
+    const IntProductId = parseInt(productId, 10);
   
-    if (ratingValue < 1 || ratingValue > 5) {
+    if (IntRating < 1 || IntRating > 5) {
       return new Response(
         JSON.stringify({ message: "Rating value must be between 1 and 5." }),
         { status: 400 }
@@ -23,8 +26,8 @@ export async function POST(req) {
     try {
       const rating = await prisma.rating.create({
         data: {
-          value: ratingValue,
-          productId: productId,
+          value: IntRating,
+          productId: IntProductId,
         },
       });
   
@@ -33,19 +36,19 @@ export async function POST(req) {
           content,
           user_name: user_name,
           ratingId: rating.id,
-          productId: productId,
+          productId: IntProductId,
         },
       });
   
       const ratings = await prisma.rating.findMany({
-        where: { productId: productId },
+        where: { productId: IntProductId },
       });
   
       const averageRating =
         ratings.reduce((acc, rating) => acc + rating.value, 0) / ratings.length;
   
       await prisma.product.update({
-        where: { id: productId },
+        where: { id: IntProductId },
         data: {
           averageRating: averageRating,
         },
@@ -59,6 +62,26 @@ export async function POST(req) {
       console.error("Error creating review and rating:", error.message);
       return new Response(
         JSON.stringify({ message: "Error creating review and rating.", error: error.message }),
+        { status: 500 }
+      );
+    }
+  }
+  
+
+
+  export async function GET(req) {
+    try {
+      const reviews = await prisma.review.findMany({
+        include: {
+          rating: true, // Include related rating details
+          product: true, // Include related product details
+        },
+      });
+  
+      return new Response(JSON.stringify({ success: true, reviews }), { status: 200 });
+    } catch (error) {
+      return new Response(
+        JSON.stringify({ message: "Error fetching reviews.", error: error.message }),
         { status: 500 }
       );
     }
