@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import OrderDetailsForm from "../../DemoPage";
 
 const getData = async (editID) => {
-  const res = await fetch(`http://localhost:3000/api/order/${editID}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/order/${editID}`);
   const data = await res.json();
   if (data.success) {
     return data;
@@ -17,9 +17,8 @@ function Page({ params }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Await params if needed
     const fetchData = async () => {
-      const { editID } = await params;  // Await params to get editID
+      const { editID } = await params;  
       try {
         const data = await getData(editID);
         setOrderData(data);
@@ -31,7 +30,7 @@ function Page({ params }) {
     };
 
     fetchData();
-  }, [params]); // Dependencies include params
+  }, [params]); 
 
   if (loading) {
     return <div>Loading...</div>;

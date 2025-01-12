@@ -136,11 +136,17 @@ export default function Home() {
 								</td>
 								<td className='border border-gray-300 px-4 py-2'>
 									<div className='relative flex items-center gap-2'>
-										<Tooltip content='View product'>
-											<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
-												<EyeIcon />
-											</span>
-										</Tooltip>
+										<Link
+											href={`https://xorar.com/shop/${product.slug}`}
+											target='_blank'
+										>
+											<Tooltip content='View product'>
+												<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
+													<EyeIcon />
+												</span>
+											</Tooltip>
+										</Link>
+
 										<Link
 											className='cursor-pointer'
 											href={`/dashboard/products/${product.id}`}

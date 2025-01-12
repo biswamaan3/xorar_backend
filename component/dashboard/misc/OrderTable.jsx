@@ -52,6 +52,7 @@ const OrderTable = ({
 					<TableColumn>OrderID</TableColumn>
 					<TableColumn>Customer Name</TableColumn>
 					<TableColumn>Email</TableColumn>
+					<TableColumn>Payment Type</TableColumn>
 					<TableColumn>Payment Status</TableColumn>
 					<TableColumn>Delivery Status</TableColumn>
 
@@ -65,6 +66,7 @@ const OrderTable = ({
 							<TableCell>{item.orderID || "1"}</TableCell>
 							<TableCell>{item.fullName}</TableCell>
 							<TableCell>{item.email}</TableCell>
+							<TableCell>{item.paymentType}</TableCell>
 							<TableCell>{item.paymentStatus}</TableCell>
 							<TableCell>{item.deliveryStatus}</TableCell>
 							<TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>

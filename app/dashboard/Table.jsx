@@ -55,22 +55,22 @@ const OrderDetailsTable = ({orderDetails}) => {
 
 			const updatedDetails = await response.json();
 			console.log("Updated Data after Delete:", updatedDetails);
-			// You can update the state with the new data here after deletion
 		} catch (error) {
 			console.error("Error deleting order:", error);
-			// Handle errors and show a user-friendly message
 		}
 	};
 
 	return (
-		<div className='overflow-x-auto'>
-			<table className='min-w-full'>
+		<div className='w-full'>
+			<table className='full'>
 				<thead className='bg-gray-100'>
 					<tr>
 						<th className='px-4 py-2 text-left'>Order ID</th>
 						<th className='px-4 py-2 text-left'>Product Name</th>
 						<th className='px-4 py-2 text-left'>Size</th>
 						<th className='px-4 py-2 text-left'>Color</th>
+						<th className='px-4 py-2 text-left'>Design</th>
+
 						<th className='px-4 py-2 text-left'>Quantity</th>
 						<th className='px-4 py-2 text-left'>Price</th>
 						<th className='px-4 py-2 text-left'>Total Price</th>
@@ -127,6 +127,7 @@ const OrderDetailsTable = ({orderDetails}) => {
 									order.sizeId || "N/A"
 								)}
 							</td>
+							
 							<td className='px-4 py-2'>
 								{editedData?.id === order.id ? (
 									<input
@@ -142,6 +143,23 @@ const OrderDetailsTable = ({orderDetails}) => {
 									/>
 								) : (
 									order.colorId || "N/A"
+								)}
+							</td>
+							<td className='px-4 py-2'>
+								{editedData?.id === order.id ? (
+									<input
+										type='text'
+										value={editedData.design || "N/A"}
+										onChange={(e) =>
+											setEditedData({
+												...editedData,
+												designId: e.target.value,
+											})
+										}
+										className='px-2 py-1 border border-gray-300 rounded'
+									/>
+								) : (
+									order.designId || "N/A"
 								)}
 							</td>
 							<td className='px-4 py-2'>

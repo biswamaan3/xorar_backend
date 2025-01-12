@@ -56,12 +56,13 @@ const OrderDetailsForm = ({data}) => {
 
 	const [isEditing, setIsEditing] = useState(null); // Track which field is being edited
 	const [orderDetails, setOrderDetails] = useState({
-		fullName: data?.fullName || "No Name", // Default to "No Name" if fullName is not provided
+		fullName: data?.fullName || "No Name",
 		email: data?.email || "No Email",
 		country: data?.country || "No Country", // Default to "No Country" if country is not provided
 		phone: data?.phone || "No Phone Number", // Default to "No Phone Number" if phone is not provided
 		address: data?.address || "No Address", // Default to "No Address" if address is not provided
 		city: data?.city || "No City", // Default to "No City" if city is not provided
+		landmark: data?.landmark || "No Landmark",
 		state: data?.state || "No State", // Default to "No State" if state is not provided
 		pinCode: data?.pinCode || "No Pin Code", // Default to "No Pin Code" if pinCode is not provided
 		paymentStatus: data?.paymentStatus || "No Payment Status", // Default to "No Payment Status" if paymentStatus is not provided
@@ -186,6 +187,17 @@ const OrderDetailsForm = ({data}) => {
 						label='Pin Code'
 						id='pinCode'
 						value={orderDetails.pinCode}
+						onChange={handleChange}
+						isEditing={isEditing}
+						onToggleEdit={handleEditToggle}
+						onSave={handleSave}
+					/>
+				</div>
+				<div className='w-full mb-6'>
+					<EditableInput
+						label='Landmark'
+						id='landmark'
+						value={orderDetails.landmark}
 						onChange={handleChange}
 						isEditing={isEditing}
 						onToggleEdit={handleEditToggle}

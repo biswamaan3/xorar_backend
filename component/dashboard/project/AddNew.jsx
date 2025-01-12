@@ -2,6 +2,8 @@
 import React, {useEffect, useState} from "react";
 import ImageUploadComp from "./imageUpload/ImageComp";
 import {
+	Accordion,
+	AccordionItem,
 	Button,
 	Checkbox,
 	Input,
@@ -78,6 +80,7 @@ function AddNew() {
 		styles: [],
 		categories: [],
 	});
+	const [design, setDesign] = useState([]);
 	const [formData, setFormData] = useState({
 		title: "",
 		category: "",
@@ -138,7 +141,7 @@ function AddNew() {
 			sizes: formData.sizes.map((size) => parseInt(size, 10)), // Ensure sizes are integers (IDs)
 			colors: formData.colors.map((color) => parseInt(color, 10)), // Ensure colors are integers (IDs)
 			showOnHome: formData.showOnHome || false, // Ensure showOnHome is a boolean
-			images: images, 
+			images: images,
 		};
 
 		try {
@@ -237,6 +240,15 @@ function AddNew() {
 					name='style'
 					onChange={handleChange}
 				/>
+				{/* <Accordion>
+					<AccordionItem
+						key='1'
+						aria-label='Add Design'
+						title='Add Design'
+					>
+						Add
+					</AccordionItem>
+				</Accordion> */}
 				<ProductSelect
 					label='Product Size (Multiple selection allowed)'
 					options={properties.sizes}
