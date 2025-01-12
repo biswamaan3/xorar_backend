@@ -1,6 +1,15 @@
-export const NewOrder = ({fullName, address, city, state, country, email,orderDetailsWithThumbnails,paymentStatus, deliveryStatus}) => { 
-    return (
-        `
+export const NewOrder = ({
+	fullName,
+	address,
+	city,
+	state,
+	country,
+	email,
+	orderDetails,
+	paymentStatus,
+	deliveryStatus,
+}) => {
+	return `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
         <h2>Order Confirmation</h2>
         <p>Dear ${fullName},</p>
@@ -22,23 +31,33 @@ export const NewOrder = ({fullName, address, city, state, country, email,orderDe
             </tr>
           </thead>
           <tbody>
-            ${orderDetailsWithThumbnails
-              .map(
-                (detail) => `
+            ${orderDetails
+				.map(
+					(detail) => `
                 <tr>
                   <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
-                    <img src="${detail.thumbnail}" alt="${detail.productName}" style="width: 50px; height: 50px; object-fit: cover;" />
+                    <img src="${detail.thumbnail}" alt="${
+						detail.productName
+					}" style="width: 50px; height: 50px; object-fit: cover;" />
                   </td>
                   <td style="border: 1px solid #ddd; padding: 8px;">
-                    <a href="${detail.productUrl}" target="_blank">${detail.productName}</a>
+                    <a href="${detail.productUrl}" target="_blank">${
+						detail.productName
+					}</a>
                   </td>
-                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${detail.quantity}</td>
-                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${detail.price.toFixed(2)}</td>
-                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${(detail.quantity * detail.price).toFixed(2)}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${
+						detail.quantity
+					}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${detail.price.toFixed(
+						2
+					)}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${(
+						detail.quantity * detail.price
+					).toFixed(2)}</td>
                 </tr>
               `
-              )
-              .join('')}
+				)
+				.join("")}
           </tbody>
         </table>
         <h3>Order Details</h3>
@@ -49,6 +68,5 @@ export const NewOrder = ({fullName, address, city, state, country, email,orderDe
         <p>If you have any questions about your order, feel free to contact us.</p>
         <p>Best regards,<br>Your Company</p>
       </div>
-    `
-    )
-}
+    `;
+};

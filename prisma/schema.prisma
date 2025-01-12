@@ -46,6 +46,7 @@ model Product {
   style            Style             @relation(fields: [styleId], references: [id])
   colors           Color[]           @relation("ProductColors") // Many-to-many relation
   subcategories    Subcategory[]     @relation("ProductSubcategories")
+  design           Design[]          @relation("ProductDesign")
   description      String
   price            Float
   actual_price     Float
@@ -64,6 +65,13 @@ model Product {
   OrderDetail      OrderDetail[]
   AddedToCart      AddedToCart[]
   AddedToWishlist  AddedToWishlist[]
+}
+
+model Design{
+  id       Int       @id @default(autoincrement())
+  image    String
+  products Product[] @relation("ProductDesign") // Many-to-many relation
+  orderDetails OrderDetail[] 
 }
 
 model Color {
@@ -113,11 +121,16 @@ model Order {
   orderID        String?
   fullName       String // Full name of the buyer
   email          String // Email of the buyer
+  phone          String?
   address        String // Shipping address
   city           String // City of the buyer
   country        String // Country of the buyer
   state          String // State of the buyer
-  paymentStatus  String // Payment status (e.g., "pending", "completed")
+  pinCode        String?
+  landMark       String?
+  paymentType    String?
+  totalValue     String?
+  paymentStatus  String // Payment status (e.g., "pending", "completed", "cash on delivery")
   deliveryStatus String // Delivery status (e.g., "pending", "shipped", "delivered")
   createdAt      DateTime      @default(now()) // Order creation date
   updatedAt      DateTime      @updatedAt // Order update date
@@ -133,14 +146,14 @@ model OrderDetail {
   quantity    Int      // Quantity of the product
   price       Float    // Price of a single product
   totalPrice  Float    // Total price for this product (price * quantity)
-
+  thumbnail   String?
   sizeId      Int?     // Foreign key to Size
   designId    Int?     // Foreign key to Design
   colorId     Int?     // Foreign key to Color
 
   size        Size?    @relation(fields: [sizeId], references: [id])    
   color       Color?   @relation(fields: [colorId], references: [id])   
-
+  design      Design?  @relation(fields: [designId], references: [id])
   order   Order   @relation(fields: [orderId], references: [id]) // Relationship to Order
   product Product @relation(fields: [productId], references: [id]) // Relationship to Product
 }
