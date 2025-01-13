@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import OrderDetailsForm from "../../DemoPage";
 
 const getData = async (editID) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/order/${editID}`);
+  const res = await fetch(`/api/order/${editID}`);
   const data = await res.json();
   if (data.success) {
     return data;

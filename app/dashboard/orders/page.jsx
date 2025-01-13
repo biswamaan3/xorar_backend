@@ -6,7 +6,7 @@ function page() {
 	return (
 		<div>
 			<PageHeader
-				title={"All Products"}
+				title={"All Orders"}
 				description={
 					<p className='font-bold text-lg'>
 						find recentely ordered products.

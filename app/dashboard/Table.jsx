@@ -13,40 +13,43 @@ const OrderDetailsTable = ({orderDetails}) => {
 		setEditedData(editedRow);
 	};
 
-	// Function to handle update
 	const handleUpdate = async (id) => {
 		try {
-			const response = await fetch(`/api/order/1/edit?id=${data.id}`, {
-				method: "PUT", // PUT request to update the order
+			if (!editedData) {
+				throw new Error("No data to update");
+			}
+	
+			const response = await fetch(`/api/order/1/edit?id=${editedData.id}`, {
+				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(editedData), // Send updated data
+				body: JSON.stringify(editedData),
 			});
-
+	
 			if (!response.ok) {
+				alert("Failed to update order details");
 				throw new Error("Failed to update order details");
 			}
-
+	
 			const updatedDetails = await response.json();
 			console.log("Updated Data:", updatedDetails);
-
-			// Update order details state after successful update
-			// You might want to update the orderDetails state here or trigger a re-fetch
-			setEditedData(null); // Reset edited data after update
-
-			// Optionally, trigger any visual feedback for success here (e.g., a success message)
+	
+			setEditedData(null);
+	
+			// Optionally, refresh or update the orderDetails list here
 		} catch (error) {
 			console.error("Error updating order:", error);
 			// Optionally, handle errors and show an error message to the user
 		}
 	};
+	
 
 	// Function to handle delete
 	const handleDelete = async (id) => {
 		try {
 			const response = await fetch(`/api/order/${id}/delete`, {
-				method: "DELETE", // DELETE request to remove the order
+				method: "DELETE",
 			});
 
 			if (!response.ok) {
@@ -124,10 +127,10 @@ const OrderDetailsTable = ({orderDetails}) => {
 										className='px-2 py-1 border border-gray-300 rounded'
 									/>
 								) : (
-									order.sizeId || "N/A"
+									order.size.name || "N/A"
 								)}
 							</td>
-							
+
 							<td className='px-4 py-2'>
 								{editedData?.id === order.id ? (
 									<input
@@ -142,14 +145,19 @@ const OrderDetailsTable = ({orderDetails}) => {
 										className='px-2 py-1 border border-gray-300 rounded'
 									/>
 								) : (
-									order.colorId || "N/A"
+									<div
+										className='w-7 h-7 rounded-full'
+										style={{
+											backgroundColor: order.color.code,
+										}}
+									></div>
 								)}
 							</td>
 							<td className='px-4 py-2'>
 								{editedData?.id === order.id ? (
 									<input
 										type='text'
-										value={editedData.design || "N/A"}
+										value={editedData.designId || "N/A"}
 										onChange={(e) =>
 											setEditedData({
 												...editedData,
@@ -159,7 +167,12 @@ const OrderDetailsTable = ({orderDetails}) => {
 										className='px-2 py-1 border border-gray-300 rounded'
 									/>
 								) : (
-									order.designId || "N/A"
+									<Image
+										src={order.design.image}
+										alt={order.designId || "N/A"}
+										width={50}
+										height={50}
+									/>
 								)}
 							</td>
 							<td className='px-4 py-2'>

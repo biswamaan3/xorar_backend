@@ -65,13 +65,10 @@ const Sidebar = () => {
 				{/* Navigation */}
 				<nav className='flex-1'>
 					<ul className='px-2'>
-						<SidebarItem
-							icon={<Home size={22} className='' />}
-							label='Home'
-						/>
+					
 						<SidebarItem
 							icon={<BookA size={22} />}
-							link='/dashboard/orders/'
+							link='/dashboard'
 							label='Orders'
 						/>
 						<SidebarItem

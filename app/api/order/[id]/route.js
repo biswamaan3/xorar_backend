@@ -13,6 +13,9 @@ export async function GET(req, {params}) {
 				orderDetails: {
 					include: {
 						product: true,
+						size: true,
+						color: true,
+						design: true,
 					},
 				},
 			},
