@@ -15,6 +15,7 @@ export async function GET(req) {
     const product = await prisma.product.findUnique({
       where: { id: Number(productId) },
       include: {
+        design: true,
         category: true,
         style: true,
         sizes: true,

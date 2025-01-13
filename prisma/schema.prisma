@@ -67,7 +67,7 @@ model Product {
   AddedToWishlist  AddedToWishlist[]
 }
 
-model Design{
+model Design {
   id       Int       @id @default(autoincrement())
   image    String
   products Product[] @relation("ProductDesign") // Many-to-many relation

@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import ImageUploadComp from "./imageUpload/ImageComp";
 import {
+  Accordion,
+  AccordionItem,
   Button,
   Checkbox,
   Input,
@@ -92,6 +94,7 @@ function EditProduct({ id }) {
     discount: "",
     showOnHome: false,
   });
+  const [design, setDesign] = useState([]);
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -124,8 +127,10 @@ function EditProduct({ id }) {
             discountedPrice: newData.product.price,
             actualPrice: newData.product.actual_price,
           });
+          const designImages = newData.product.design.map((designItem) => designItem.image);
 
           setImages([newData.product.thumbnail, ...newData.product.images]);
+          setDesign(designImages);
           setLoading(false);
         } else {
           console.error("Error fetching properties:", data.message);
@@ -172,6 +177,7 @@ function EditProduct({ id }) {
       thumbnail: images[0],
       images: images.slice(1),
       showOnHome: formData.showOnHome,
+      design: design,
     };
   
     try {
@@ -273,6 +279,20 @@ function EditProduct({ id }) {
               onChange={handleChange}
               defaultSelectedKeys={formData.style}
             />
+            <div className='my-5 bg-gray-200 rounded-lg'>
+					<Accordion>
+						<AccordionItem
+							key='1'
+							aria-label='Edit Design'
+							title='Edit Design'
+						>
+							<ImageUploadComp
+								images={design}
+								setImages={setDesign}
+							/>
+						</AccordionItem>
+					</Accordion>
+				</div>
             <ProductSelect
               label="Product Size (Multiple selection allowed)"
               options={properties.sizes}

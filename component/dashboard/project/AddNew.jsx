@@ -241,7 +241,7 @@ function AddNew() {
 					name='style'
 					onChange={handleChange}
 				/>
-				<div className='my-5'>
+				<div className='my-5 bg-gray-200 rounded-lg'>
 					<Accordion>
 						<AccordionItem
 							key='1'
