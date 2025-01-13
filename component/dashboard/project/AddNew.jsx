@@ -142,6 +142,7 @@ function AddNew() {
 			colors: formData.colors.map((color) => parseInt(color, 10)), // Ensure colors are integers (IDs)
 			showOnHome: formData.showOnHome || false, // Ensure showOnHome is a boolean
 			images: images,
+			designs: design,
 		};
 
 		try {
@@ -240,15 +241,21 @@ function AddNew() {
 					name='style'
 					onChange={handleChange}
 				/>
-				{/* <Accordion>
-					<AccordionItem
-						key='1'
-						aria-label='Add Design'
-						title='Add Design'
-					>
-						Add
-					</AccordionItem>
-				</Accordion> */}
+				<div className='my-5'>
+					<Accordion>
+						<AccordionItem
+							key='1'
+							aria-label='Add Design'
+							title='Add Design'
+						>
+							<ImageUploadComp
+								images={design}
+								setImages={setDesign}
+							/>
+						</AccordionItem>
+					</Accordion>
+				</div>
+
 				<ProductSelect
 					label='Product Size (Multiple selection allowed)'
 					options={properties.sizes}
