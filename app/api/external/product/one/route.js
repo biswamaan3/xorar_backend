@@ -22,6 +22,7 @@ export async function GET(req) {
 		const product = await prisma.product.findUnique({
 			where: {slug},
 			include: {
+				design: true,
 				sizes: true,
 				colors: true,
 				category: true,
