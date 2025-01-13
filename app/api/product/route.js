@@ -118,12 +118,11 @@ export async function POST(req) {
 		const thumbnail = images[0];
 		const productImages = images.slice(1);
 		let designConnections = [];
+
 		if (designs && designs.length > 0) {
 			for (const designUrl of designs) {
-				const design = await prisma.design.upsert({
-					where: {image: designUrl},
-					update: {},
-					create: {image: designUrl},
+				const design = await prisma.design.create({
+					data: {image: designUrl},
 				});
 				designConnections.push({id: design.id});
 			}
