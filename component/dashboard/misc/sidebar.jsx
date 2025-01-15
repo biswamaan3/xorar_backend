@@ -18,7 +18,7 @@ const SidebarItem = ({icon, label, onClick, link = "/", children}) => {
 		<li>
 			<Link
 				href={link}
-				className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+				className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 no-theme:text-white no-theme:hover:bg-gray-700'
 				onClick={onClick}
 			>
 				<div className='flex items-center space-x-2'>
@@ -56,7 +56,7 @@ const Sidebar = () => {
 			className='fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0'
 			aria-label='Sidenav'
 		>
-			<div className='overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+			<div className='overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 no-theme:bg-gray-800 no-theme:border-gray-700'>
 				{/* Logo Section */}
 				<div className='px-6 pt-6 pb-3 text-[30px] font-bold text-left'>
 					<span className='text-gray-700'>Xorar</span>
