@@ -73,8 +73,8 @@ export async function POST(req) {
     try {
       const reviews = await prisma.review.findMany({
         include: {
-          rating: true, // Include related rating details
-          product: true, // Include related product details
+          rating: true, 
+          product: true,
         },
       });
   
