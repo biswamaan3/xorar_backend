@@ -2,12 +2,6 @@
 import {prisma} from "../../../../../lib/prisma"; // Prisma client
 
 export async function GET(req) {
-	const referer = req.headers.get("referer");
-	const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
-
-	// if (!referer || !allowedOrigins.some(origin => referer.startsWith(origin))) {
-	//   return new Response(JSON.stringify({ message: 'Invalid origin.' }), { status: 403 });
-	// }
 
 	const url = new URL(req.url);
 	const slug = url.searchParams.get("slug");
@@ -38,6 +32,13 @@ export async function GET(req) {
 			);
 		}
 
+		await prisma.product.update({
+			where: { slug },
+			data: {
+			  views: product.views + 1,
+			},
+		  });
+	  
 		const recommendedProducts = await prisma.product.findMany({
 			where: {
 				categoryId: product.categoryId,
