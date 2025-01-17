@@ -10,8 +10,10 @@ import {
 	ShirtIcon,
 	Layers2,
 	Star,
+	Mail,
 	ChartColumnStacked,
 } from "lucide-react";
+
 import Link from "next/link";
 const SidebarItem = ({icon, label, onClick, link = "/", children}) => {
 	return (
@@ -116,7 +118,7 @@ const Sidebar = () => {
 							link="/dashboard/reviews"
 						/>
 						<SidebarItem
-							icon={<Star size={22} className='' />}
+							icon={<Mail size={22} className='' />}
 							label='Email Subscribers'
 							link="/dashboard/subscribers"
 						/>

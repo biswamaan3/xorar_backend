@@ -69,22 +69,19 @@ const OrderTable = ({
 							<TableCell>{item.paymentType}</TableCell>
 							<TableCell>{item.paymentStatus}</TableCell>
 							<TableCell>{item.deliveryStatus}</TableCell>
-							<TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>
+							<TableCell>
+								{new Date(item.createdAt).toLocaleString()}
+							</TableCell>
 
 							<TableCell>
 								<div className='relative flex items-center gap-2'>
-									<Tooltip content='View product'>
-										<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
-											<EyeIcon />
-										</span>
-									</Tooltip>
 									<Link
 										className='cursor-pointer'
 										href={`/dashboard/orders/${item.id}`}
 									>
-										<Tooltip content='Edit product'>
+										<Tooltip content='View product'>
 											<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
-												<EditIcon />
+												<EyeIcon />
 											</span>
 										</Tooltip>
 									</Link>
