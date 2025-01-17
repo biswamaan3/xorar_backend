@@ -1,55 +1,43 @@
 import {prisma} from "@/lib/prisma";
 
 export async function POST(req) {
-	const referer = req.headers.get("referer");
-	const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
+    const body = await req.json();
+    const { email } = body;
 
-	if (
-		!referer ||
-		!allowedOrigins.some((origin) => referer.startsWith(origin))
-	) {
-		return new Response(JSON.stringify({
-            success: false,
-            message: "Invalid origin."}), {
-			status: 403,
-		});
-	}
+    if (!email) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Missing required fields.",
+            }),
+            { status: 400 }
+        );
+    }
 
-	const body = await req.json();
-	const {email} = body;
+    try {
+        await prisma.EmailSubscriber.create({
+            data: {
+                email: email,
+            },
+        });
 
-	if (!email) {
-		return new Response(
-			JSON.stringify({
-				success: false,
-				message: "Missing required fields.",
-			}),
-			{status: 400}
-		);
-	}
-
-	try {
-		await prisma.EmailSubscriber.create({
-			email: email,
-		});
-		return new Response(
-			JSON.stringify({success: true, message: "Email Added."}),
-			{status: 200}
-		);
-	} catch (error) {
-		console.error("Error Adding to Subscriber List:", error);
-		return new Response(
-			JSON.stringify({
-				success: false,
-				message: "Error Adding to Subscriber List.",
-			}),
-			{
-				status: 500,
-			}
-		);
-	}
+        return new Response(
+            JSON.stringify({ success: true, message: "Email Added." }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error Adding to Subscriber List:", error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Error Adding to Subscriber List.",
+            }),
+            {
+                status: 500,
+            }
+        );
+    }
 }
-
 export async function GET(req) {
     const referer = req.headers.get("referer");
     const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
