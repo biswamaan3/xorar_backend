@@ -115,6 +115,11 @@ const Sidebar = () => {
 							label='Reviews'
 							link="/dashboard/reviews"
 						/>
+						<SidebarItem
+							icon={<Star size={22} className='' />}
+							label='Email Subscribers'
+							link="/dashboard/subscribers"
+						/>
 						 <SidebarItem
 						icon={<Settings size={22} />}
 						label='Logout'

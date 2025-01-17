@@ -183,3 +183,10 @@ model AddedToWishlist {
   dateRemoved DateTime?
   product     Product   @relation(fields: [productId], references: [id])
 }
+
+
+model EmailSubscriber{
+  id  Int  @id @default(autoincrement())
+  email String 
+  createdAt   DateTime  @default(now())
+}

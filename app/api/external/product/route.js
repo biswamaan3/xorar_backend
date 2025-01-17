@@ -82,3 +82,5 @@ export async function GET(req) {
     return new Response(JSON.stringify({ message: 'Error fetching products.', error: error.message }), { status: 500 });
   }
 }
+
+
