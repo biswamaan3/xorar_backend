@@ -11,7 +11,7 @@ import {
 	Pagination,
 	Tooltip,
 } from "@nextui-org/react";
-import {DeleteIcon, EditIcon, EyeIcon} from "lucide-react";
+import { DeleteIcon, EditIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
 
 const OrderTable = ({
@@ -46,8 +46,8 @@ const OrderTable = ({
 	};
 
 	return (
-		<div>
-			<Table aria-label='Cart or Wishlist Items'>
+		<div className="bg-white text-black">
+			<Table aria-label="Cart or Wishlist Items">
 				<TableHeader>
 					<TableColumn>OrderID</TableColumn>
 					<TableColumn>Customer Name</TableColumn>
@@ -55,9 +55,7 @@ const OrderTable = ({
 					<TableColumn>Payment Type</TableColumn>
 					<TableColumn>Payment Status</TableColumn>
 					<TableColumn>Delivery Status</TableColumn>
-
 					<TableColumn>Order Date</TableColumn>
-
 					<TableColumn>Actions</TableColumn>
 				</TableHeader>
 				<TableBody>
@@ -72,28 +70,27 @@ const OrderTable = ({
 							<TableCell>
 								{new Date(item.createdAt).toLocaleString()}
 							</TableCell>
-
 							<TableCell>
-								<div className='relative flex items-center gap-2'>
+								<div className="relative flex items-center gap-2">
 									<Link
-										className='cursor-pointer'
+										className="cursor-pointer"
 										href={`/dashboard/orders/${item.id}`}
 									>
-										<Tooltip content='View product'>
-											<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
+										<Tooltip content="View product">
+											<span className="text-lg text-default-400 cursor-pointer active:opacity-50">
 												<EyeIcon />
 											</span>
 										</Tooltip>
 									</Link>
 									<Tooltip
-										color='danger'
-										content='Delete product'
+										color="danger"
+										content="Delete product"
 									>
 										<span
 											onClick={() =>
 												handleDelete(item.id)
 											}
-											className='text-lg text-danger cursor-pointer active:opacity-50'
+											className="text-lg text-danger cursor-pointer active:opacity-50"
 										>
 											<DeleteIcon />
 										</span>
@@ -106,12 +103,12 @@ const OrderTable = ({
 			</Table>
 
 			{/* Pagination component */}
-			<div className='flex mt-10 justify-center'>
+			<div className="flex mt-10 justify-center">
 				<Pagination
 					total={totalPages}
 					initialPage={currentPage}
 					onChange={handlePageChange}
-					aria-label='Pagination'
+					aria-label="Pagination"
 				/>
 			</div>
 		</div>
