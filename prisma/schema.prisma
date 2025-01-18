@@ -154,8 +154,8 @@ model OrderDetail {
   size        Size?    @relation(fields: [sizeId], references: [id])    
   color       Color?   @relation(fields: [colorId], references: [id])   
   design      Design?  @relation(fields: [designId], references: [id])
-  order   Order   @relation(fields: [orderId], references: [id]) // Relationship to Order
-  product Product @relation(fields: [productId], references: [id]) // Relationship to Product
+ order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model AddedToCart {
@@ -168,7 +168,7 @@ model AddedToCart {
   city        String
   dateAdded   DateTime  @default(now())
   dateRemoved DateTime?
-  product     Product   @relation(fields: [productId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model AddedToWishlist {
@@ -181,7 +181,7 @@ model AddedToWishlist {
   city        String
   dateAdded   DateTime  @default(now())
   dateRemoved DateTime?
-  product     Product   @relation(fields: [productId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 
