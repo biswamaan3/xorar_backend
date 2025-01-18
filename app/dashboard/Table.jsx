@@ -5,6 +5,7 @@ const OrderDetailsTable = ({orderDetails}) => {
 	if (!orderDetails) {
 		return <div>Loading order details...</div>;
 	}
+	console.log("Order Details:", orderDetails);
 
 	const [editedData, setEditedData] = useState(null);
 
@@ -167,12 +168,16 @@ const OrderDetailsTable = ({orderDetails}) => {
 										className='px-2 py-1 border border-gray-300 rounded'
 									/>
 								) : (
+									order.design ? 
 									<Image
-										src={order.design.image}
+										src={order?.design?.image || ""}
 										alt={order.designId || "N/A"}
 										width={50}
 										height={50}
 									/>
+									:
+									"N/A"
+									
 								)}
 							</td>
 							<td className='px-4 py-2'>

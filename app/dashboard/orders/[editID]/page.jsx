@@ -21,6 +21,7 @@ function Page({ params }) {
       const { editID } = await params;  
       try {
         const data = await getData(editID);
+        console.log(data);
         setOrderData(data);
       } catch (err) {
         setError(err.message);
