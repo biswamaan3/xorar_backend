@@ -94,9 +94,9 @@ export default function Home() {
 						products?.map((product) => (
 							<tr
 								key={product.id}
-								className='bg-white hover:bg-gray-50 relative'
+								className='bg-white !text-black hover:bg-gray-50 relative'
 							>
-								<td className='border group cursor-pointer hover:bg-gray-50 border-gray-300 px-4 py-2'>
+								<td className='border group cursor-pointer !text-black hover:bg-gray-50 border-gray-300 px-4 py-2'>
 									{product.title}
 									<Image
 										src={product.thumbnail}
@@ -106,42 +106,42 @@ export default function Home() {
 										className='hidden absolute left-24 top-0 rounded-lg object-contain group-hover:block z-[999] '
 									/>
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									{product.category.name}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									{product.style.name}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
-									${product.price.toFixed(2)}
+								<td className='border !text-black border-gray-300 px-4 py-2'>
+								₹{product.price.toFixed(2)}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									{product.views}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									{product.sizes
 										.map((size) => size.name)
 										.join(", ")}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									{product.colors.map((color) => (
 										<span
 											key={color.id}
-											className='inline-block w-5 h-5 mr-2 border border-gray-400 rounded-full'
+											className='inline-block w-5 !text-black h-5 mr-2 border border-gray-400 rounded-full'
 											style={{
 												backgroundColor: color.code,
 											}}
 										></span>
 									))}
 								</td>
-								<td className='border border-gray-300 px-4 py-2'>
+								<td className='border !text-black border-gray-300 px-4 py-2'>
 									<div className='relative flex items-center gap-2'>
 										<Link
 											href={`https://xorar.com/shop/${product.slug}`}
 											target='_blank'
 										>
 											<Tooltip content='View product'>
-												<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
+												<span className='text-lg !text-black cursor-pointer '>
 													<EyeIcon />
 												</span>
 											</Tooltip>
@@ -152,7 +152,7 @@ export default function Home() {
 											href={`/dashboard/products/${product.id}`}
 										>
 											<Tooltip content='Edit product'>
-												<span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
+												<span className='text-lg !text-black cursor-pointer '>
 													<EditIcon />
 												</span>
 											</Tooltip>
