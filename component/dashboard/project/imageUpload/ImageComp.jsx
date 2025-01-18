@@ -24,6 +24,7 @@ const ImageUpload = ({ onFileChange }) => {
             </div>
             <input
               type="file"
+              multiple
               className="h-full w-full opacity-0"
               onChange={onFileChange} // Handle file upload here
             />
@@ -61,37 +62,47 @@ function ImageUploadComp({ images, setImages }) {
   };
 
   const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
       console.error("No file selected");
       return;
     }
-
+  
     setUploading(true); // Start uploading process
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/image_uploader", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (data.message === "success" && data.imgUrl) {
-        console.log("File uploaded successfully: ", data.imgUrl);
-        setImages((prevImages) => [...prevImages, data.imgUrl]); // Add new image URL
-      } else {
-        console.error("Error uploading file:", data.message);
+  
+    const uploadedImages = [];
+  
+    // Process each selected file
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      try {
+        const res = await fetch("/api/image_uploader", {
+          method: "POST",
+          body: formData,
+        });
+  
+        const data = await res.json();
+  
+        if (data.message === "success" && data.imgUrl) {
+          console.log("File uploaded successfully: ", data.imgUrl);
+          uploadedImages.push(data.imgUrl); // Store the uploaded image URL
+        } else {
+          console.error("Error uploading file:", data.message);
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
       }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    } finally {
-      setUploading(false); // End uploading process
     }
+  
+    if (uploadedImages.length > 0) {
+      setImages((prevImages) => [...prevImages, ...uploadedImages]); // Add new image URLs to the list
+    }
+  
+    setUploading(false); // End uploading process
   };
+  
 
   return (
     <div>
