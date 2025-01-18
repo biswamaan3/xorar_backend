@@ -9,7 +9,7 @@ export async function GET() {
 					name: "T-Shirt",
 				},
 			},
-			take: 4,
+			take: 8,
 			orderBy: {
 				createdAt: "desc",
 			},
