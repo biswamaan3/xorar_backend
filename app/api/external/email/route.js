@@ -39,19 +39,7 @@ export async function POST(req) {
     }
 }
 export async function GET(req) {
-    const referer = req.headers.get("referer");
-    const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
-
-    if (
-        !referer ||
-        !allowedOrigins.some((origin) => referer.startsWith(origin))
-    ) {
-        return new Response(JSON.stringify({
-            success: false,
-            message: "Invalid origin."}), {
-            status: 403,
-        });
-    }
+   
 
     const url = new URL(req.url);
     const size = parseInt(url.searchParams.get("size"), 10) || 10;

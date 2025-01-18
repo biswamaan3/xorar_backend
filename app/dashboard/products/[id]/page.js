@@ -7,7 +7,7 @@ async function page({params}) {
 
 	return (
 		<div>
-			<PageHeader title={"Edit Product"} />
+			<PageHeader title={"Edit Product"} backbutton="/dashboard/products" />
 			<div>{id ? <EditProduct id={id} /> : "Loading..."}</div>
 		</div>
 	);

@@ -1,6 +1,7 @@
 "use client";
 import React, {useState, useEffect} from "react";
 import OrderDetailsTable from "./Table";
+import {PageHeader} from "@/component/text";
 
 // Reusable Input Component
 const EditableInput = ({
@@ -110,7 +111,10 @@ const OrderDetailsForm = ({data}) => {
 
 	return (
 		<div className='w-4/5'>
-			<h1 className='text-2xl font-semibold mb-6'>Order Details</h1>
+			<PageHeader
+				title='Order Details'
+				backbutton={"/dashboard/orders"}
+			/>
 			<div>
 				<div className='grid gap-6 mb-6 md:grid-cols-2'>
 					<EditableInput

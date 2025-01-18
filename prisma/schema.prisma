@@ -44,9 +44,9 @@ model Product {
   sizes            Size[]            @relation("ProductSizes")
   styleId          Int
   style            Style             @relation(fields: [styleId], references: [id])
-  colors           Color[]           @relation("ProductColors") // Many-to-many relation
+  colors           Color[]           @relation("ProductColors") // Many-to-many, no onDelete: Cascade needed
   subcategories    Subcategory[]     @relation("ProductSubcategories")
-  design           Design[]          @relation("ProductDesign")
+  design           Design[]          @relation("ProductDesign") // Many-to-many, no onDelete: Cascade needed
   description      String
   price            Float
   actual_price     Float
@@ -67,6 +67,7 @@ model Product {
   AddedToWishlist  AddedToWishlist[]
 }
 
+
 model Design {
   id       Int       @id @default(autoincrement())
   image    String
@@ -86,7 +87,7 @@ model Rating {
   id        Int      @id @default(autoincrement())
   value     Int // Rating value between 1-5
   productId Int
-  product   Product  @relation(fields: [productId], references: [id], name: "ProductRatings")
+  product   Product  @relation(fields: [productId], references: [id], name: "ProductRatings", onDelete: Cascade)
   createdAt DateTime @default(now())
   Review    Review[]
 }
@@ -98,7 +99,7 @@ model Review {
   ratingId  Int
   rating    Rating   @relation(fields: [ratingId], references: [id])
   productId Int
-  product   Product  @relation(fields: [productId], references: [id], name: "ProductReviews")
+  product   Product  @relation(fields: [productId], references: [id], name: "ProductReviews" , onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
