@@ -11,7 +11,7 @@ export const NewOrder = ({
 }) => {
 	return `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h2>Order Confirmation</h2>
+        <h2>Xorar</h2>
         <p>Dear ${fullName},</p>
         <p>Thank you for your order! Here are your order details:</p>
         <h3>Shipping Information</h3>
