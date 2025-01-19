@@ -67,20 +67,19 @@ model Product {
   AddedToWishlist  AddedToWishlist[]
 }
 
-
 model Design {
-  id       Int       @id @default(autoincrement())
-  image    String
-  products Product[] @relation("ProductDesign") // Many-to-many relation
-  orderDetails OrderDetail[] 
+  id           Int           @id @default(autoincrement())
+  image        String        @unique
+  products     Product[]     @relation("ProductDesign") // Many-to-many relation
+  orderDetails OrderDetail[]
 }
 
 model Color {
-  id       Int       @id @default(autoincrement())
-  name     String
-  code     String // Hex code for the color
-  products Product[] @relation("ProductColors") // Many-to-many relation
-  orderDetails OrderDetail[] 
+  id           Int           @id @default(autoincrement())
+  name         String
+  code         String // Hex code for the color
+  products     Product[]     @relation("ProductColors") // Many-to-many relation
+  orderDetails OrderDetail[]
 }
 
 model Rating {
@@ -99,14 +98,14 @@ model Review {
   ratingId  Int
   rating    Rating   @relation(fields: [ratingId], references: [id])
   productId Int
-  product   Product  @relation(fields: [productId], references: [id], name: "ProductReviews" , onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], name: "ProductReviews", onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
 model Size {
-  id       Int       @id @default(autoincrement())
-  name     String // Name of the size (e.g., "Small", "Medium", "Large")
-  products Product[] @relation("ProductSizes") // Many-to-many relation
+  id           Int           @id @default(autoincrement())
+  name         String // Name of the size (e.g., "Small", "Medium", "Large")
+  products     Product[]     @relation("ProductSizes") // Many-to-many relation
   orderDetails OrderDetail[]
 }
 
@@ -114,7 +113,6 @@ model Style {
   id       Int       @id @default(autoincrement())
   name     String // Name of the style (e.g., "Casual", "Formal")
   products Product[]
-  
 }
 
 model Order {
@@ -139,24 +137,24 @@ model Order {
 }
 
 model OrderDetail {
-  id          Int      @id @default(autoincrement())
-  orderId     Int      // Foreign key to Order
-  productId   Int      // Foreign key to Product
-  productName String   // Name of the product
-  productUrl  String   // URL of the product
-  quantity    Int      // Quantity of the product
-  price       Float    // Price of a single product
-  totalPrice  Float    // Total price for this product (price * quantity)
+  id          Int     @id @default(autoincrement())
+  orderId     Int // Foreign key to Order
+  productId   Int // Foreign key to Product
+  productName String // Name of the product
+  productUrl  String // URL of the product
+  quantity    Int // Quantity of the product
+  price       Float // Price of a single product
+  totalPrice  Float // Total price for this product (price * quantity)
   thumbnail   String?
-  sizeId      Int?     // Foreign key to Size
-  designId    Int?     // Foreign key to Design
-  colorId     Int?     // Foreign key to Color
+  sizeId      Int? // Foreign key to Size
+  designId    Int? // Foreign key to Design
+  colorId     Int? // Foreign key to Color
 
-  size        Size?    @relation(fields: [sizeId], references: [id])    
-  color       Color?   @relation(fields: [colorId], references: [id])   
-  design      Design?  @relation(fields: [designId], references: [id])
- order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size    Size?   @relation(fields: [sizeId], references: [id])
+  color   Color?  @relation(fields: [colorId], references: [id])
+  design  Design? @relation(fields: [designId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model AddedToCart {
@@ -169,7 +167,7 @@ model AddedToCart {
   city        String
   dateAdded   DateTime  @default(now())
   dateRemoved DateTime?
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model AddedToWishlist {
@@ -182,12 +180,11 @@ model AddedToWishlist {
   city        String
   dateAdded   DateTime  @default(now())
   dateRemoved DateTime?
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-
-model EmailSubscriber{
-  id  Int  @id @default(autoincrement())
-  email String 
-  createdAt   DateTime  @default(now())
+model EmailSubscriber {
+  id        Int      @id @default(autoincrement())
+  email     String
+  createdAt DateTime @default(now())
 }

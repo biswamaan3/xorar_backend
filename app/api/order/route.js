@@ -1,4 +1,4 @@
-import {sendOrderConfirmationEmail} from "@/lib/mailer";
+import {sendErrorNotificationEmail, sendOrderConfirmationEmail} from "@/lib/mailer";
 import {prisma} from "../../../lib/prisma";
 function generateOrderID() {
 	const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -168,7 +168,19 @@ export async function POST(req) {
 			},
 		});
 
-		await sendOrderConfirmationEmail(newOrder);
+		(async () => {
+			try {
+				await sendOrderConfirmationEmail(newOrder);
+			} catch (emailError) {
+				// Log the error and notify `dipanjan@gmail.com`
+				console.error("Error sending order confirmation email:", emailError.message);
+				try {
+					await sendErrorNotificationEmail("biswamaan3@gmail.com", emailError.message);
+				} catch (notifyError) {
+					console.error("Error sending error notification email:", notifyError.message);
+				}
+			}
+		})();
 
 		return new Response(JSON.stringify({success: true, order: newOrder}), {
 			status: 200,

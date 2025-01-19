@@ -254,18 +254,25 @@ export async function PUT(req) {
 				connect: colorIds.map((color) => ({id: color.id})),
 			};
 		}
-		let designConnections = [];
-		if(updateData.design){
-			
+		if (updateData.design) {
+			let designConnections = [];
+
 			for (const designUrl of updateData.design) {
-				const design = await prisma.design.create({
-					data: {image: designUrl},
+				let existingDesign = await prisma.design.findUnique({
+					where: {image: designUrl},
 				});
-				designConnections.push({id: design.id});
+
+				if (!existingDesign) {
+					existingDesign = await prisma.design.create({
+						data: {image: designUrl},
+					});
+				}
+
+				designConnections.push({id: existingDesign.id});
 			}
 			updateData.design = {
-				connect: designConnections
-			}
+				connect: designConnections,
+			};
 		}
 		const IntID = parseInt(id, 10);
 		const product = await prisma.product.update({
