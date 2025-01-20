@@ -48,10 +48,10 @@ export const NewOrder = ({
                   <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${
 						detail.quantity
 					}</td>
-                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${detail.price.toFixed(
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">₹ ${detail.price.toFixed(
 						2
 					)}</td>
-                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">$${(
+                  <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">₹ ${(
 						detail.quantity * detail.price
 					).toFixed(2)}</td>
                 </tr>
