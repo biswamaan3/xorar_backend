@@ -23,23 +23,7 @@ const OrderTable = ({
 	onDelete,
 	onPageChange,
 }) => {
-	const handleDelete = async (id) => {
-		const isConfirmed = window.confirm(
-			"Are you sure you want to delete this item?"
-		);
-
-		if (!isConfirmed) {
-			return;
-		}
-
-		try {
-			await onDelete(id);
-			alert("Item deleted successfully");
-		} catch (error) {
-			console.error(error);
-			alert("Failed to delete item");
-		}
-	};
+	
 
 	const handlePageChange = (page) => {
 		onPageChange(page);
@@ -85,11 +69,11 @@ const OrderTable = ({
 									<Tooltip
 										color="danger"
 										content="Delete product"
+										
 									>
 										<span
-											onClick={() =>
-												handleDelete(item.id)
-											}
+										onClick={() => onDelete({id: item.id})}
+											 // Call onDelete with the item id
 											className="text-lg text-danger cursor-pointer active:opacity-50"
 										>
 											<DeleteIcon />

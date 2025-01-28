@@ -1,20 +1,6 @@
 import {sendErrorNotificationEmail, sendOrderConfirmationEmail} from "@/lib/mailer";
 import {prisma} from "../../../lib/prisma";
-function generateOrderID() {
-	const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const numbers = "0123456789";
-	let orderID = "";
-	for (let i = 0; i < 3; i++) {
-		orderID += alphabets.charAt(
-			Math.floor(Math.random() * alphabets.length)
-		);
-	}
-	for (let i = 0; i < 3; i++) {
-		orderID += numbers.charAt(Math.floor(Math.random() * numbers.length));
-	}
 
-	return orderID;
-}
 
 export async function GET(req) {
 	try {
@@ -171,6 +157,7 @@ export async function POST(req) {
 		(async () => {
 			try {
 				await sendOrderConfirmationEmail(newOrder);
+				await SendOrderDetailstoOwner(newOrder);
 			} catch (emailError) {
 				// Log the error and notify `dipanjan@gmail.com`
 				console.error("Error sending order confirmation email:", emailError.message);
@@ -305,6 +292,49 @@ export async function PUT(req) {
 				error: error.message,
 			}),
 			{status: 500}
+		);
+	}
+}
+
+export async function DELETE(req) {
+	try {
+		
+		const body = await req.json();
+		const {id} = body;
+		console.log("Deleting order with ID:", id);
+		if (!id) {
+			return new Response(
+				JSON.stringify({message: "Order ID is required."}),
+				{status: 400}
+			);
+		}
+
+		const existingOrder = await prisma.order.findUnique({
+			where: {id},
+		});
+		if (!existingOrder) {
+			return new Response(
+				JSON.stringify({ message: "Order not found." }),
+				{ status: 404 }
+			);
+		}
+
+		await prisma.order.delete({
+			where: { id },
+		});
+
+		return new Response(
+			JSON.stringify({ message: "Order deleted successfully." }),
+			{ status: 200 }
+		);
+
+	} catch (error) {
+		console.error("Error deleting order:", error);
+
+		// Return a 500 response in case of an error
+		return new Response(
+			JSON.stringify({ message: "An error occurred while deleting the order." }),
+			{ status: 500 }
 		);
 	}
 }

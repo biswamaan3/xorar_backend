@@ -49,7 +49,61 @@ const EditableInput = ({
 		</div>
 	);
 };
+const EditableSelect = ({
+	label,
+	id,
+	value,
+	options,
+	onChange,
+	isEditing,
+	onToggleEdit,
+	onSave,
+}) => {
+	return (
+		<div>
+			<label
+				htmlFor={id}
+				className='block mb-2 text-sm font-medium text-gray-900 no-theme:text-white'
+			>
+				{label}
+			</label>
+			{isEditing === id ? (
+				<div className='relative'>
+					<select
+						id={id}
+						name={id}
+						className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 no-theme:bg-gray-700 no-theme:border-gray-600 no-theme:placeholder-gray-400 no-theme:text-white no-theme:focus:ring-blue-500 no-theme:focus:border-blue-500'
+						value={value}
+						onChange={(e) => onChange(e)} // Call onChange with the new value
+					>
+						{options.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+					<button
+						className='text-white absolute end-2.5 bottom-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 no-theme:bg-blue-600 no-theme:hover:bg-blue-700 no-theme:focus:ring-blue-800'
+						onClick={() => onSave(id, value)} // Call onSave when clicked
+					>
+						Save
+					</button>
+				</div>
+			) : (
+				<span
+					onClick={() => onToggleEdit(id)}
+					className='cursor-pointer'
+				>
+					{value}
+				</span>
+			)}
+		</div>
+	);
+};
 
+const paymentStatusOptions = ["Paid", "Unpaid", "Refunded", "pending"];
+const deliveryStatusOptions = ["Order Processing", "Delivered", "In Transit", "Processing"];
+ 
 const OrderDetailsForm = ({data}) => {
 	if (!data) {
 		return <div>Loading order details...</div>;
@@ -76,6 +130,7 @@ const OrderDetailsForm = ({data}) => {
 
 	const handleChange = (e) => {
 		const {id, value} = e.target;
+		console.log(id, value);
 		setOrderDetails({
 			...orderDetails,
 			[id]: value,
@@ -84,30 +139,34 @@ const OrderDetailsForm = ({data}) => {
 
 	const handleSave = async (id, value) => {
 		setOrderDetails({
-			...orderDetails,
-			[id]: value,
+		  ...orderDetails,
+		  [id]: value,
 		});
 		try {
-			const response = await fetch(`/api/order/1/edit?id=${data.id}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					[id]: value,
-				}),
-			});
-
-			if (response.ok) {
-				console.log("Order updated successfully");
-			} else {
-				console.error("Failed to update order");
-			}
+		  const response = await fetch(`/api/order/1/edit?id=${data.id}`, {
+			method: "PUT",
+			headers: {
+			  "Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+			  id: data.id,
+			  name: id,
+			  value: value,
+			  [id]: value,
+			}),
+		  });
+	
+		  if (response.ok) {
+			console.log("Order updated successfully");
+		  } else {
+			console.error("Failed to update order");
+		  }
 		} catch (error) {
-			console.error("Error updating order:", error);
+		  console.error("Error updating order:", error);
 		}
 		setIsEditing(null);
-	};
+	  };
+	
 
 	return (
 		<div className='w-4/5'>
@@ -213,7 +272,7 @@ const OrderDetailsForm = ({data}) => {
 					Payment and Delivery
 				</h1>
 				<div className='grid grid-cols-1 gap-6 mb-6 md:grid-cols-2'>
-					<EditableInput
+					<EditableSelect
 						label='Payment Status'
 						id='paymentStatus'
 						value={orderDetails.paymentStatus}
@@ -221,8 +280,9 @@ const OrderDetailsForm = ({data}) => {
 						isEditing={isEditing}
 						onToggleEdit={handleEditToggle}
 						onSave={handleSave}
+						options={paymentStatusOptions}
 					/>
-					<EditableInput
+					<EditableSelect
 						label='Delivery Status'
 						id='deliveryStatus'
 						value={orderDetails.deliveryStatus}
@@ -230,6 +290,7 @@ const OrderDetailsForm = ({data}) => {
 						isEditing={isEditing}
 						onToggleEdit={handleEditToggle}
 						onSave={handleSave}
+						options={deliveryStatusOptions}
 					/>
 				</div>
 

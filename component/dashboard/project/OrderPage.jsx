@@ -16,7 +16,7 @@ const OrderPage = () => {
 	}, [currentPage]);
 
 	const fetchData = async (page) => {
-		setLoading(true); 
+		setLoading(true);
 		try {
 			const response = await fetch(
 				`/api/order?page=${page}&size=${itemsPerPage}`
@@ -32,16 +32,45 @@ const OrderPage = () => {
 		}
 	};
 
-	const handleDelete = async (id) => {
+	const handleDelete = async ({id}) => {
+		console.log("Deleting item with id:", id);
 		try {
-		return;
+			const isConfirmed = window.confirm(
+				"Are you sure you want to delete this item?"
+			);
+	
+			if (!isConfirmed) {
+				return;
+			}
+
+			const response = await fetch(`/api/order`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({id}),
+			});
+
+			if (response.status == 200) {
+				setCartItems((prevItems) =>
+					prevItems.filter((item) => item.id !== id)
+				);
+				alert("Item deleted successfully");
+
+				console.log("Item deleted successfully");
+			} else {
+				const errorData = await response.json();
+				console.error("Error deleting item:", errorData.message);
+				alert("Error deleting item");
+			}
 		} catch (error) {
 			console.error("Error deleting item:", error);
-		}
+			alert("Error deleting item");
+		} 
 	};
 
 	const handlePageChange = (page) => {
-		setCurrentPage(page); // Update the current page state
+		setCurrentPage(page);
 	};
 
 	return (

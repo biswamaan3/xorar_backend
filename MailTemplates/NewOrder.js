@@ -70,3 +70,69 @@ export const NewOrder = ({
       </div>
     `;
 };
+
+
+
+
+export const OwnerOrderDetails = ({
+  fullName,
+  email,
+  address,
+  city,
+  state,
+  country,
+  orderDetails,
+  paymentStatus,
+  deliveryStatus,
+}) => {
+  return `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <h2>New Order Received</h2>
+      <p>A new order has been placed by <strong>${fullName}</strong> (<a href="mailto:${email}">${email}</a>).</p>
+      <h3>Shipping Information</h3>
+      <p>
+        <strong>Address:</strong> ${address}, ${city}, ${state}, ${country}
+      </p>
+      <h3>Order Summary</h3>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #ddd; padding: 8px;">Product</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${orderDetails
+            .map(
+              (detail) => `
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">
+                  ${detail.productName}
+                </td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                  ${detail.quantity}
+                </td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                  ₹ ${detail.price.toFixed(2)}
+                </td>
+                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                  ₹ ${(detail.quantity * detail.price).toFixed(2)}
+                </td>
+              </tr>
+            `
+            )
+            .join('')}
+        </tbody>
+      </table>
+      <h3>Order Details</h3>
+      <p>
+        <strong>Payment Status:</strong> ${paymentStatus}<br>
+        <strong>Delivery Status:</strong> ${deliveryStatus}
+      </p>
+      <p>Please review the order in the admin panel for further processing.</p>
+      <p>Best regards,<br>Your Team</p>
+    </div>
+  `;
+};
