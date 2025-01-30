@@ -1,4 +1,4 @@
-import {sendErrorNotificationEmail, sendOrderConfirmationEmail} from "@/lib/mailer";
+import {sendErrorNotificationEmail, sendOrderConfirmationEmail, SendOrderDetailstoOwner} from "@/lib/mailer";
 import {prisma} from "../../../lib/prisma";
 
 
@@ -157,7 +157,7 @@ export async function POST(req) {
 		(async () => {
 			try {
 				await sendOrderConfirmationEmail(newOrder);
-				await SendOrderDetailstoOwner(newOrder);
+				await SendOrderDetailstoOwner(newOrder)
 			} catch (emailError) {
 				// Log the error and notify `dipanjan@gmail.com`
 				console.error("Error sending order confirmation email:", emailError.message);
