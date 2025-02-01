@@ -22,6 +22,11 @@ export async function GET(req) {
 				category: true,
 				style: true,
 				ratings: true,
+				reviews: {
+					include: {
+						rating: true,
+					}
+				},
 			},
 		});
 
@@ -38,6 +43,8 @@ export async function GET(req) {
 			  views: product.views + 1,
 			},
 		  });
+
+		  const averageRating = product.ratings.reduce((acc, rating) => acc + rating.value, 0) / product.ratings.length;
 	  
 		const recommendedProducts = await prisma.product.findMany({
 			where: {
@@ -52,6 +59,7 @@ export async function GET(req) {
 				success: true,
 				product,
 				recommendedProducts,
+				averageRating
 			}),
 			{
 				status: 200,
